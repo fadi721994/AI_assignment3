@@ -7,6 +7,8 @@ from selection import Selection
 from elitism import Elitism
 from crossover import CrossOver
 import numpy as np
+import argparse
+import sys
 
 
 GA_POPSIZE = 2048
@@ -204,13 +206,13 @@ def print_best(gav):
 
 
 def print_data(population, start_time, iter_num):
-    print("    Average: " + str(average(population)))
-    print("    Deviation: " + str(deviation(population)))
+    print("    Iteration number: " + str(iter_num))
+    print("    Fitness average: " + str(average(population)))
+    print("    Fitness deviation: " + str(deviation(population)))
     run_time = time.time() - start_time
     clock_ticks = run_time * CLOCKS_PER_SECOND
     print("    Clock ticks elapsed: " + str(clock_ticks))
     print("    Time elapsed: " + str(run_time))
-    print("    Iteration number: " + str(iter_num))
 
 
 def swap(population, buffer):
@@ -228,16 +230,11 @@ def calc_fitness(population, fitness_type):
 
 
 def main():
-    fitness_type = Fitness.DISTANCE
-    selection_type = Selection.RWS
-    elitism_type = Elitism.ELITE_RATE
-    crossover_type = CrossOver.ONE_POINT
+    fitness_type, selection_type, elitism_type, crossover_type = parse_cmd()
     overall_time = time.time()
-    pop_alpha = []
-    pop_beta = []
-    init_population(pop_alpha, pop_beta)
-    population = pop_alpha
-    buffer = pop_beta
+    population = []
+    buffer = []
+    init_population(population, buffer)
     iter_num = 0
     for i in range(GA_MAXITER):
         start_time = time.time()
@@ -256,6 +253,50 @@ def main():
     print("Overall clock ticks: " + str(overall_clock_ticks))
     print("Overall time: " + str(overall_time))
     print("Overall iterations: " + str(iter_num))
+
+
+def parse_cmd():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-F', default=0, help='Fitness function: 0 for distance from target string, '
+                                              '1 for bulls and cows.')
+    parser.add_argument('-S', default=0, help='Selection type: 0 for Random from the top half, 1 for RWS, '
+                                              '2 for tournament.')
+    parser.add_argument('-E', default=0, help='Elitism type: 0 for elite rate, 1 for aging.')
+    parser.add_argument('-C', default=0, help='Crossover type: 0 for one-point crossover, 1 for two-point crossover.')
+    args = parser.parse_args()
+    try:
+        fitness_function = int(args.F)
+        if fitness_function != 0 and fitness_function != 1:
+            print("Fitness function can only be 0 or 1.")
+            sys.exit()
+    except ValueError:
+        print("Fitness function can only be 0 or 1.")
+        sys.exit()
+    try:
+        selection_type = int(args.S)
+        if selection_type != 0 and selection_type != 1 and selection_type != 2:
+            print("Selection type can only be 0, 1 or 2.")
+            sys.exit()
+    except ValueError:
+        print("Selection type can only be 0, 1 or 2.")
+        sys.exit()
+    try:
+        elitism_type = int(args.E)
+        if elitism_type != 0 and elitism_type != 1:
+            print("Elitism type can only be 0 or 1.")
+            sys.exit()
+    except ValueError:
+        print("Elitism type can only be 0 or 1.")
+        sys.exit()
+    try:
+        crossover_type = int(args.C)
+        if crossover_type != 0 and crossover_type != 1:
+            print("Crossover type can only be 0 or 1.")
+            sys.exit()
+    except ValueError:
+        print("Crossover type can only be 0 or 1.")
+        sys.exit()
+    return Fitness(fitness_function), Selection(selection_type), Elitism(elitism_type), CrossOver(crossover_type)
 
 
 main()
