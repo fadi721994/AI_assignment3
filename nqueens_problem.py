@@ -9,11 +9,13 @@ class NQueensProblem:
     def __init__(self, data):
         self.data = data
 
+    # Check if the fitness is zero, meaning, if the run is over
     def is_done(self, best):
         if best.fitness == 0:
             return True
         return False
 
+    # Randomly initialize rows for columns for each citizen
     def init_citizen(self):
         citizen = Citizen()
         for i in range(self.data.queens_num):
@@ -24,10 +26,12 @@ class NQueensProblem:
             citizen.board[col] = row
         return citizen
 
+    # Calculate the fitness by calculating the overall conflicts
     def calc_fitness(self, population):
         for citizen in population:
             citizen.fitness = utils.calc_overall_conflicts(citizen.board, self.data.queens_num)
 
+    # Print the best citizen at the end of each generation
     def print_best(self, gav, iter_num):
         print("Iteration number: " + str(iter_num))
         print("Best: ")
@@ -40,6 +44,7 @@ class NQueensProblem:
             file.write("    Fitness average: " + str(round(utils.average(gav, self.data.ga_popsize), 3)) + "\n")
             file.write("    Fitness deviation: " + str(round(utils.deviation(gav, self.data.ga_popsize), 3)) + "\n")
 
+    # Pretty print the board
     def print_board(self, board):
         for row in range(self.data.queens_num):
             print_str = ''
@@ -50,12 +55,14 @@ class NQueensProblem:
                     print_str = print_str + '. '
             print(print_str)
 
+    # Choose the mutation method and run it
     def mutate(self, citizen):
         if self.data.queens_mutation == NQueensMutation.EXCHANGE:
             self.exchange_mutation(citizen)
         else:
             self.simple_inversion_mutation(citizen)
 
+    # Exchange mutation, switch the places of 2 queens
     def exchange_mutation(self, citizen):
         col_1 = int(random.randint(0, 32767) % self.data.queens_num)
         col_2 = int(random.randint(0, 32767) % self.data.queens_num)
@@ -63,6 +70,7 @@ class NQueensProblem:
             col_2 = int(random.randint(0, 32767) % self.data.queens_num)
         citizen.board[col_1], citizen.board[col_2] = citizen.board[col_2], citizen.board[col_1]
 
+    # Simple inversion mutation, reverse a section of the board
     def simple_inversion_mutation(self, citizen):
         col_1 = int(random.randint(0, 32767) % self.data.queens_num)
         col_2 = int(random.randint(0, 32767) % self.data.queens_num)
@@ -74,12 +82,14 @@ class NQueensProblem:
         for i in range(for_range):
             citizen.board[col_1+i], citizen.board[col_2-i] = citizen.board[col_2-i], citizen.board[col_1+i]
 
+    # Choose the crossover method and run it
     def crossover(self, first_parent, second_parent):
         if self.data.queens_crossover == NQueensCrossover.PMX:
             return self.pmx_crossover(first_parent, second_parent)
         else:
             return self.ox_crossover(first_parent, second_parent)
 
+    # Perform PMX crossover. We run it 3 times for each descendant
     def pmx_crossover(self, first_parent, second_parent):
         citizen = Citizen()
         for i in range(3):
@@ -92,6 +102,7 @@ class NQueensProblem:
             citizen.board[entry] = second_parent.board[entry]
         return citizen
 
+    # OX crossover. Like described in the Permutation cross-over file
     def ox_crossover(self, first_parent, second_parent):
         chosen_entries = 0
         citizen = Citizen()

@@ -1,9 +1,4 @@
-import random
-from citizen import Citizen
-from string_search_crossover import StringSearchCrossOver
 from algorithm import Algorithm
-from genetic_problem import GeneticProblem
-from nqueens_crossover import NQueensCrossover
 from genetic_algorithm import GeneticAlgorithm
 from csp_algorithm import CSPAlgorithm
 import utils

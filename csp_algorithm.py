@@ -9,6 +9,7 @@ class CSPAlgorithm:
     def __init__(self, data):
         self.data = data
 
+    # The actual algorithm run
     def run(self):
         overall_time = time.clock()
         board = []
@@ -31,6 +32,7 @@ class CSPAlgorithm:
             file.write("Overall time: " + str(overall_time) + "\n")
             file.write("Overall iterations: " + str(iter_num) + "\n")
 
+    # Check if the n-queens board is solved
     def is_solved(self, board):
         fitness = 0
         for i in range(self.data.queens_num):
@@ -39,7 +41,9 @@ class CSPAlgorithm:
             return True
         return False
 
+    # Find the best row to move the queen to
     def find_best_row(self, board, random_col):
+        # Find the minimum value for conflicts
         new_board = copy.deepcopy(board)
         min_conflicts = math.inf
         for i in range(self.data.queens_num):
@@ -47,11 +51,13 @@ class CSPAlgorithm:
             conflicts = utils.calc_overall_conflicts(new_board, self.data.queens_num)
             if conflicts < min_conflicts:
                 min_conflicts = conflicts
+        # Get a list of rows to move the queen to, which provide the minimum value
         best_rows = []
         for i in range(self.data.queens_num):
             new_board[random_col] = i
             conflicts = utils.calc_overall_conflicts(new_board, self.data.queens_num)
             if conflicts == min_conflicts:
                 best_rows.append(i)
+        # Choose randomly among the minimum value rows to move to
         best_row = random.choice(best_rows)
         return best_row

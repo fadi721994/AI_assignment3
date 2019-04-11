@@ -1,7 +1,6 @@
 from citizen import Citizen
 import random
 import utils
-import math
 
 
 class KnapsackProblem:
@@ -46,12 +45,14 @@ class KnapsackProblem:
         self.optimal_solution = self.problems_optimal_solutions[self.data.knapsack_problem]
         self.items = len(self.weights)
 
+    # Check if the knapsack solution we have is similar to the one provided
     def is_done(self, best):
         for i in range(self.items):
             if best.knapsack[i] != self.optimal_solution[i]:
                 return False
         return True
 
+    # Initialize the knapsack randomly
     def init_citizen(self):
         citizen = Citizen()
         for j in range(self.items):
@@ -63,6 +64,8 @@ class KnapsackProblem:
         self.validate_and_update_sack(citizen)
         return citizen
 
+    # Upon crossover or mutation, we might exceed the amount of capacity for the knapsack
+    # This function randomly chooses one of the items in the knapsack and removes it until the capacity is fixed
     def validate_and_update_sack(self, citizen):
         overall_weight = 0
         for i in range(self.items):
@@ -78,11 +81,13 @@ class KnapsackProblem:
             citizen.knapsack[item] = 0
         citizen.capacity = overall_weight
 
+    # Calculate the fitness of the sack by finding the maximum value we can reach and subtracting the amount we gathered
     def calc_fitness(self, population):
         overall_value = sum(self.prices)
         for citizen in population:
             citizen.fitness = overall_value - self.get_sack_value(citizen)
 
+    # Returns the value of the knapsack
     def get_sack_value(self, citizen):
         sack_value = 0
         for i in range(self.items):
@@ -90,6 +95,7 @@ class KnapsackProblem:
                 sack_value = sack_value + self.prices[i]
         return sack_value
 
+    # Prints and outputs to the file the best citizen
     def print_best(self, gav, iter_num):
         print("Iteration number " + str(iter_num))
         with open("output.txt", 'a') as file:
@@ -113,6 +119,7 @@ class KnapsackProblem:
             file.write("    Fitness average: " + str(round(utils.average(gav, self.data.ga_popsize), 3)) + "\n")
             file.write("    Fitness deviation: " + str(round(utils.deviation(gav, self.data.ga_popsize), 3)) + "\n")
 
+    # Mutation is done by Simple Inversion Mutation
     def mutate(self, citizen):
         item_1 = int(random.randint(0, 32767) % self.items)
         item_2 = int(random.randint(0, 32767) % self.items)
@@ -126,6 +133,9 @@ class KnapsackProblem:
                 citizen.knapsack[item_2-i], citizen.knapsack[item_1+i]
         self.validate_and_update_sack(citizen)
 
+    # We performed crossover in the following way:
+    # The descendant gets all the items in the parents knapsack
+    # Randomly remove one of the items, and randomly add 2 other items, then fix the sack capacity
     def crossover(self, first_parent, second_parent):
         citizen = Citizen()
         overall_weights = 0
