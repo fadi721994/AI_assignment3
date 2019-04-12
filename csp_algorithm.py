@@ -8,6 +8,7 @@ import math
 class CSPAlgorithm:
     def __init__(self, data):
         self.data = data
+        print("Running CSP algorithm")
 
     # The actual algorithm run
     def run(self):

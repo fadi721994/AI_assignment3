@@ -4,6 +4,10 @@ from genetic_problem import GeneticProblem
 from string_search_problem import StringSearchProblem
 from nqueens_problem import NQueensProblem
 from knapsack_problem import KnapsackProblem
+from nqueens_crossover import NQueensCrossover
+from nqueens_mutation import NQueensMutation
+from string_search_crossover import StringSearchCrossOver
+from string_search_fitness import StringSearchFitness
 from selection import Selection
 from citizen import Citizen
 
@@ -11,12 +15,53 @@ from citizen import Citizen
 class GeneticAlgorithm:
     def __init__(self, data):
         self.data = data
+        if self.data.selection == Selection.RANDOM:
+            selection = "Randomly choosing from top half selection"
+        elif self.data.selection == Selection.RWS:
+            selection = "Roulette wheel selection"
+        elif self.data.selection == Selection.AGING:
+            selection = "Aging selection"
+        else:
+            selection = "Tournament selection"
+
+        print("Running a genetic algorithm")
         if self.data.genetic_problem == GeneticProblem.STRING_SEARCH:
             self.problem = StringSearchProblem(data)
+            if self.data.string_search_fitness == StringSearchFitness.DISTANCE:
+                fitness = "ASCII distance from target string fitness function"
+            else:
+                fitness = "Bulls and cows fitness function"
+            if self.data.string_search_crossover == StringSearchCrossOver.ONE_POINT:
+                crossover = "One-point crossover"
+            else:
+                crossover = "Two-point crossover"
+            print("Solving the string search problem")
+            print("Using:")
+            print("    Selection method: " + selection)
+            print("    Fitness method: " + fitness)
+            print("    Crossover method: " + crossover)
         elif self.data.genetic_problem == GeneticProblem.NQUEENS:
             self.problem = NQueensProblem(data)
+            if self.data.queens_crossover == NQueensCrossover.PMX:
+                crossover = "PMX crossover"
+            else:
+                crossover = "OX crossover"
+            if self.data.queens_mutation == NQueensMutation.EXCHANGE:
+                mutation = "Exchange mutation"
+            else:
+                mutation = "Simple inversion mutation"
+            print("Solving the N-queens problem")
+            print("Using:")
+            print("    Selection method: " + selection)
+            print("    Crossover method: " + crossover)
+            print("    Mutation method: " + mutation)
+            print("    N is set to: " + str(self.data.queens_num))
         else:
             self.problem = KnapsackProblem(data)
+            print("Solving the knapsack problem")
+            print("Using:")
+            print("    Selection method: " + selection)
+            print("    Solving problem number: " + str(self.data.knapsack_problem))
 
     # The actual algorithm run
     def run(self):
