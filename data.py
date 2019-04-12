@@ -51,7 +51,7 @@ class Data:
         parser = argparse.ArgumentParser()
         parser.add_argument('-A', default=0, help='Algorithm type: 0 for genetic algorithm, 1 for CSP')
         parser.add_argument('-GP', default=0,
-                            help='Genetic algorithm type: 0 for string search, 1 for N-queens, 2 for 0-1 knapsack')
+                            help='Genetic problem: 0 for string search, 1 for N-queens, 2 for 0-1 knapsack')
         parser.add_argument('-KP', default=1, help='Knapsack problem number. Can be between 1 and 8')
         parser.add_argument('-QN', default=8, help='Queens number')
         parser.add_argument('-QM', default=0,
