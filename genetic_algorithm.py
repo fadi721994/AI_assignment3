@@ -68,8 +68,6 @@ class GeneticAlgorithm:
         # we had to initialize another selection field called original_selection and use it when necessary
         if self.data.original_selection == Selection.AGING:
             self.initialize_aging_data(population)
-            self.data.chosen_pairs.clear()
-            self.data.selection = Selection.AGING
         for i in range(esize, self.data.ga_popsize):
             i1, i2 = self.select_parents(population)
             buffer[i] = self.problem.crossover(population[i1], population[i2])
@@ -90,6 +88,8 @@ class GeneticAlgorithm:
     # When using aging, upon each generation, find which citizens are older than the GA_age
     def initialize_aging_data(self, population):
         self.data.aged_citizens.clear()
+        self.data.chosen_pairs.clear()
+        self.data.selection = Selection.AGING
         for i, citizen in enumerate(population):
             if citizen.age > self.data.ga_age:
                 self.data.aged_citizens.append(i)

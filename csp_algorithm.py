@@ -26,7 +26,6 @@ class CSPAlgorithm:
             iter_num = iter_num + 1
         overall_time = time.clock() - overall_time
         overall_clock_ticks = overall_time * self.data.clocks_per_second
-        utils.print_board(board, self.data.queens_num)
         with open("output.txt", 'a') as file:
             file.write("Overall clock ticks: " + str(overall_clock_ticks) + "\n")
             file.write("Overall time: " + str(overall_time) + "\n")

@@ -39,7 +39,7 @@ class NQueensProblem:
         print("Fitness: " + str(gav[0].fitness))
         print()
         with open("output.txt", 'a') as file:
-            file.write("Best fitness: " + str(gav[0].fitness) + ")\n")
+            file.write("Best fitness: " + str(gav[0].fitness) + "\n")
             file.write("    Iteration number: " + str(iter_num) + "\n")
             file.write("    Fitness average: " + str(round(utils.average(gav, self.data.ga_popsize), 3)) + "\n")
             file.write("    Fitness deviation: " + str(round(utils.deviation(gav, self.data.ga_popsize), 3)) + "\n")

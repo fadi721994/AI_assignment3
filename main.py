@@ -15,7 +15,7 @@ def main():
     else:
         algorithm = CSPAlgorithm(data)
     algorithm.run()
-
+    print("Finished!")
 
 # pr = cProfile.Profile()
 # pr.enable()

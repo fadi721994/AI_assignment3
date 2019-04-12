@@ -78,10 +78,10 @@ class Data:
         try:
             genetic_prob = int(args.GP)
             if genetic_prob != 0 and genetic_prob != 1 and genetic_prob != 2:
-                print("Genetic algorithm can only be 0, 1 or 2.")
+                print("Genetic problem can only be 0, 1 or 2.")
                 sys.exit()
         except ValueError:
-            print("Genetic algorithm can only be 0, 1 or 2.")
+            print("Genetic problem can only be 0, 1 or 2.")
             sys.exit()
 
         try:
